@@ -516,6 +516,10 @@
   </div>
   <input id="gate-input" type="password" placeholder="Password" autocomplete="off" />
   <div id="gate-error"></div>
+  <label style="display:flex; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:0.72rem; color:#aaa; cursor:pointer; margin-top:4px;">
+    <input type="checkbox" id="gate-remember" style="accent-color:var(--orange); width:14px; height:14px;" />
+    Remember me on this device
+  </label>
   <button id="gate-btn" onclick="checkPassword()">Enter</button>
 </div>
 
@@ -526,8 +530,10 @@
   const input = document.getElementById('gate-input');
   const gate = document.getElementById('gate');
   const err = document.getElementById('gate-error');
+  const remember = document.getElementById('gate-remember');
 
-  if (sessionStorage.getItem('baja-auth') === '1') {
+  // Auto-unlock if remembered
+  if (localStorage.getItem('baja-auth') === '1' || sessionStorage.getItem('baja-auth') === '1') {
     gate.style.display = 'none';
   }
 
@@ -535,7 +541,11 @@
 
   window.checkPassword = function() {
     if (input.value === PASS) {
-      sessionStorage.setItem('baja-auth', '1');
+      if (remember.checked) {
+        localStorage.setItem('baja-auth', '1');
+      } else {
+        sessionStorage.setItem('baja-auth', '1');
+      }
       gate.style.opacity = '0';
       gate.style.transition = 'opacity 0.3s';
       setTimeout(() => gate.style.display = 'none', 300);
