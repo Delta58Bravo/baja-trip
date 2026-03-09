@@ -1089,7 +1089,40 @@ function resetAll() {
 
 window._renderChecklist = renderChecklist;
 
+function renderTorque() {
+  const container = document.getElementById('torque-table');
+  if (!container) return;
+  container.innerHTML = '';
+
+  torqueData.forEach(group => {
+    const grpDiv = document.createElement('div');
+    grpDiv.className = 'torque-group';
+
+    const hdr = document.createElement('div');
+    hdr.className = 'torque-group-header';
+    hdr.textContent = group.group;
+    grpDiv.appendChild(hdr);
+
+    group.rows.forEach(row => {
+      const rowDiv = document.createElement('div');
+      rowDiv.className = 'torque-row' + (row.critical ? ' critical' : '');
+
+      rowDiv.innerHTML = `
+        <div class="torque-label">${row.fastener}</div>
+        <div class="torque-val">${row.nm}</div>
+        <div class="torque-val">${row.ftlb}</div>
+        <div class="torque-loctite">${row.loctite ? '🔴 Loctite' : ''}</div>
+        ${row.note ? `<div class="torque-note">${row.note}</div>` : ''}
+      `;
+      grpDiv.appendChild(rowDiv);
+    });
+
+    container.appendChild(grpDiv);
+  });
+}
+
 renderChecklist();
+renderTorque();
 fetchWeather();
 </script>
 
