@@ -1120,13 +1120,10 @@ if (FIREBASE_CONFIG.apiKey !== "REPLACE_ME") {
       set(checksRef, data).catch(e => console.warn('[Sync] Write failed', e));
     };
 
-    // Listen for changes from other devices — updates local state + re-renders
+    // Listen for changes from other devices — cloud is source of truth
     onValue(checksRef, (snapshot) => {
       const cloud = snapshot.val() || {};
-      const local = JSON.parse(localStorage.getItem('baja-checks') || '{}');
-      // Merge: cloud wins (cloud is source of truth)
-      const merged = Object.assign({}, local, cloud);
-      localStorage.setItem('baja-checks', JSON.stringify(merged));
+      localStorage.setItem('baja-checks', JSON.stringify(cloud));
       if (window._renderChecklist) window._renderChecklist();
     });
 
