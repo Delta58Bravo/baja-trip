@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baja Trip — Anita's Memorial Ride</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --orange: #FF5C00;
+    --dark: #0f0f0f;
+    --mid: #1c1c1c;
+    --card: #222222;
+    --border: #333;
+    --text: #e8e8e8;
+    --muted: #888;
+    --done: #3a3a3a;
+    --done-text: #555;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 32px 20px 60px;
+  }
+
+  header {
+    border-left: 4px solid var(--orange);
+    padding-left: 16px;
+    margin-bottom: 36px;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.4rem, 8vw, 4rem);
+    letter-spacing: 2px;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--orange);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .progress-bar-wrap {
+    background: var(--mid);
+    border-radius: 2px;
+    height: 6px;
+    margin-bottom: 36px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: var(--orange);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .section {
+    margin-bottom: 28px;
+  }
+
+  .section-header {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-header .icon { font-size: 1.1rem; }
+
+  .section-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    margin-left: auto;
+    letter-spacing: 1px;
+  }
+
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 13px 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    user-select: none;
+  }
+
+  .item:hover { border-color: #555; }
+
+  .item.done {
+    background: var(--done);
+    border-color: #2a2a2a;
+  }
+
+  .item.done .label {
+    text-decoration: line-through;
+    color: var(--done-text);
+  }
+
+  .item.done .note {
+    color: #444;
+  }
+
+  .checkbox {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .item.done .checkbox {
+    background: var(--orange);
+    border-color: var(--orange);
+  }
+
+  .check-icon {
+    display: none;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .item.done .check-icon { display: block; }
+
+  .label {
+    font-size: 0.92rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .note {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+
+  .tag {
+    display: inline-block;
+    background: #2a1400;
+    color: var(--orange);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-bottom: 4px;
+  }
+
+  .reset-btn {
+    display: block;
+    margin: 40px auto 0;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  /* ── TAB NAV ── */
+  .tab-nav {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+  }
+
+  .tab-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--orange); border-bottom-color: var(--orange); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── TORQUE TABLE ── */
+  .torque-group {
+    margin-bottom: 28px;
+  }
+
+  .torque-group-header {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--orange);
+    opacity: 0.8;
+    padding: 6px 0 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 6px;
+  }
+
+  .torque-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 5px;
+  }
+
+  .torque-label {
+    font-size: 0.88rem;
+    font-weight: 500;
+    line-height: 1.4;
+    flex: 1;
+  }
+
+  .torque-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: #fff;
+    white-space: nowrap;
+    padding-top: 1px;
+  }
+
+  .torque-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+
+  .torque-loctite {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: #e0a000;
+    background: #2a1e00;
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* ── ITINERARY ── */
+  .itin-day {
+    margin-bottom: 24px;
+  }
+
+  .itin-day-header {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    color: var(--orange);
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .itin-event {
+    padding: 11px 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 5px;
+  }
+
+  .itin-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--orange);
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+  }
+
+  .itin-title {
+    font-size: 0.92rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .itin-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+
+  .callout {
+    background: #2a1e00;
+    border-left: 3px solid var(--orange);
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    margin: 8px 0;
+    line-height: 1.5;
+  }
+
+  .itin-location {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  /* ── WEATHER ── */
+  .weather-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .weather-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 12px;
+    text-align: center;
+  }
+
+  .weather-day-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 6px;
+  }
+
+  .weather-icon {
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+    line-height: 1;
+  }
+
+  .weather-condition {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .weather-temps {
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .weather-temps span {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .weather-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .weather-source {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    color: #444;
+    text-align: right;
+    margin-top: -18px;
+    margin-bottom: 20px;
+  }
+  /* ── PASSWORD GATE ── */
+  #gate {
+    position: fixed;
+    inset: 0;
+    background: var(--dark);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  #gate h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 3px;
+    color: #fff;
+    border-left: 4px solid var(--orange);
+    padding-left: 16px;
+  }
+
+  #gate-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-top: -12px;
+    padding-left: 20px;
+  }
+
+  #gate-input {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem;
+    letter-spacing: 3px;
+    padding: 12px 20px;
+    border-radius: 4px;
+    text-align: center;
+    width: 220px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  #gate-input:focus { border-color: var(--orange); }
+  #gate-input.shake {
+    animation: shake 0.3s ease;
+    border-color: #cc2200;
+  }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+  }
+
+  #gate-btn {
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 11px 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  #gate-btn:hover { opacity: 0.85; }
+  #gate-error {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: #cc2200;
+    letter-spacing: 1px;
+    height: 16px;
+  }
+</style>
+</head>
+<body>
+
+<!-- PASSWORD GATE -->
+<div id="gate">
+  <div>
+    <h2>Baja Trip</h2>
+    <div id="gate-sub">Anita's Memorial Ride · 2026</div>
+  </div>
+  <input id="gate-input" type="password" placeholder="Password" autocomplete="off" />
+  <div id="gate-error"></div>
+  <button id="gate-btn" onclick="checkPassword()">Enter</button>
+</div>
+
+<script>
+// ── PASSWORD GATE ──
+(function() {
+  const PASS = 'Bravo';
+  const input = document.getElementById('gate-input');
+  const gate = document.getElementById('gate');
+  const err = document.getElementById('gate-error');
+
+  if (sessionStorage.getItem('baja-auth') === '1') {
+    gate.style.display = 'none';
+  }
+
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
+
+  window.checkPassword = function() {
+    if (input.value === PASS) {
+      sessionStorage.setItem('baja-auth', '1');
+      gate.style.opacity = '0';
+      gate.style.transition = 'opacity 0.3s';
+      setTimeout(() => gate.style.display = 'none', 300);
+    } else {
+      err.textContent = 'Incorrect password';
+      input.classList.remove('shake');
+      void input.offsetWidth;
+      input.classList.add('shake');
+      input.value = '';
+      setTimeout(() => { err.textContent = ''; input.classList.remove('shake'); }, 1500);
+    }
+  };
+})();
+</script>
+
+<header>
+  <h1>Baja Trip</h1>
+  <div class="subtitle">KTM 300 XCW 2025 &nbsp;·&nbsp; Tacoma &nbsp;·&nbsp; Baja</div>
+</header>
+
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('itinerary', this)">🏁 Itinerary</button>
+  <button class="tab-btn" onclick="switchTab('punchlist', this)">✅ Punchlist</button>
+  <button class="tab-btn" onclick="switchTab('torque', this)">🔩 Torque Ref</button>
+</nav>
+
+<!-- ITINERARY TAB -->
+<div class="tab-panel active" id="tab-itinerary">
+
+  <div class="itin-location">
+    📍 Mamá Espinoza's &nbsp;·&nbsp; Carretera Transpeninsular Km 56, El Rosario, Baja California<br>
+    ~5.5 hours south of San Diego
+  </div>
+
+  <!-- WEATHER STRIP — populated by fetchWeather() on load -->
+  <div id="weather-strip" class="weather-strip">
+    <div class="weather-card" style="grid-column:1/-1;text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.7rem;padding:20px;">
+      Loading weather…
+    </div>
+  </div>
+  <div class="weather-source" id="weather-source"></div>
+
+  <div class="itin-day">
+    <div class="itin-day-header">Friday · March 13 — Arrival</div>
+    <div class="itin-event">
+      <div class="itin-time">4:00 PM – 10:00 PM</div>
+      <div class="itin-title">Check In at Mamá Espinoza's</div>
+      <div class="itin-note">Participant number, bracelet, event t-shirt, room keys, route details</div>
+    </div>
+    <div class="itin-event">
+      <div class="itin-time">5:00 PM – 9:00 PM</div>
+      <div class="itin-title">Welcome Burgers</div>
+      <div class="itin-note">Relaxed evening — burgers and fries before the weekend kicks off</div>
+    </div>
+  </div>
+
+  <div class="itin-day">
+    <div class="itin-day-header">Saturday · March 14 — Ride Day</div>
+    <div class="itin-event">
+      <div class="itin-time">6:15 AM onward</div>
+      <div class="itin-title">Breakfast at Mamá's</div>
+      <div class="itin-note">Served every 30 min. Your group time assigned at check in.</div>
+    </div>
+    <div class="itin-event">
+      <div class="itin-time">8:45 AM</div>
+      <div class="itin-title">Ride Meeting</div>
+      <div class="itin-note">⚠️ NOT at Mamá's — at the baseball field, ~500m down the highway</div>
+    </div>
+    <div class="itin-event">
+      <div class="itin-time">9:00 AM</div>
+      <div class="itin-title">Ride Start — ~100 miles, 3 loops</div>
+      <div class="itin-note">Refuel station around mile 50. If your tank range is under 50 miles, carry extra fuel.</div>
+    </div>
+    <div class="itin-event">
+      <div class="itin-time">5:00 PM – 10:00 PM</div>
+      <div class="itin-title">Carne Asada & Raffle</div>
+      <div class="itin-note">Tacos, cold beer, and prizes after the ride</div>
+    </div>
+  </div>
+
+  <div class="itin-day">
+    <div class="itin-day-header">Sunday · March 15 — Morning + South to Catavina</div>
+    <div class="itin-event">
+      <div class="itin-time">6:00 AM – 11:00 AM</div>
+      <div class="itin-title">Breakfast at Mamá's</div>
+    </div>
+    <div class="itin-event">
+      <div class="itin-time">12:00 PM – 2:00 PM</div>
+      <div class="itin-title">Children's Celebration</div>
+    </div>
+    <div class="itin-event">
+      <div class="itin-time">After 2:00 PM</div>
+      <div class="itin-title">Drive to Catavina (~1.5 hrs south)</div>
+      <div class="itin-note">Ride all day in Catavina, then head to Gonzaga Bay for the night</div>
+    </div>
+  </div>
+
+  <div class="itin-day">
+    <div class="itin-day-header">Monday — Head Home</div>
+    <div class="itin-event">
+      <div class="itin-title">Drive home from Gonzaga Bay</div>
+      <div class="itin-note">8+ hours back to SoCal — budget the full day</div>
+    </div>
+  </div>
+
+  <div class="itin-day">
+    <div class="itin-day-header">What to Bring — Event Specific</div>
+    <div class="itin-event">
+      <div class="itin-title">Full gas tank at border crossing</div>
+      <div class="itin-note">Check current regs on fuel restrictions entering Mexico. Top off on the US side.</div>
+    </div>
+    <div class="itin-event">
+      <div class="itin-title">Tools — including tweezers for chollas</div>
+      <div class="itin-note">Cholla cactus is everywhere. You will need tweezers at some point.</div>
+    </div>
+    <div class="itin-event">
+      <div class="itin-title">Mousse (highly recommended)</div>
+      <div class="itin-note">Event-recommended. Baja terrain is rough on tubes.</div>
+    </div>
+    <div class="itin-event">
+      <div class="itin-title">Hydration pack</div>
+      <div class="itin-note">Mandatory for a 100-mile desert ride.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PUNCHLIST TAB -->
+<div class="tab-panel" id="tab-punchlist">
+  <div class="progress-label" id="progress-label">0 of 0 complete</div>
+  <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+  <div id="checklist"></div>
+  <button class="reset-btn" onclick="resetAll()">Reset All</button>
+</div>
+
+<!-- TORQUE TAB -->
+<div class="tab-panel" id="tab-torque">
+  <div id="torque-table"></div>
+</div>
+
+<script>
+
+// ── TAB SWITCHING ──
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── WEATHER FETCH ──
+async function fetchWeather() {
+  const LAT = 30.0644, LON = -115.7197;
+  const DATES = ['2026-03-13', '2026-03-14', '2026-03-15'];
+  const DAY_LABELS = ['Fri · Mar 13', 'Sat · Mar 14', 'Sun · Mar 15'];
+
+  const WMO_ICON = {
+    0:'☀️', 1:'🌤️', 2:'⛅', 3:'☁️',
+    45:'🌫️', 48:'🌫️',
+    51:'🌦️', 53:'🌦️', 55:'🌧️',
+    61:'🌧️', 63:'🌧️', 65:'🌧️',
+    71:'🌨️', 73:'🌨️', 75:'❄️',
+    80:'🌦️', 81:'🌧️', 82:'⛈️',
+    95:'⛈️', 96:'⛈️', 99:'⛈️'
+  };
+  const WMO_DESC = {
+    0:'Clear sky', 1:'Mainly clear', 2:'Partly cloudy', 3:'Overcast',
+    45:'Foggy', 48:'Foggy',
+    51:'Light drizzle', 53:'Drizzle', 55:'Heavy drizzle',
+    61:'Light rain', 63:'Rain', 65:'Heavy rain',
+    71:'Light snow', 73:'Snow', 75:'Heavy snow',
+    80:'Rain showers', 81:'Rain showers', 82:'Heavy showers',
+    95:'Thunderstorm', 96:'Thunderstorm', 99:'Thunderstorm'
+  };
+  const WIND_DIR = (deg) => {
+    const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+    return dirs[Math.round(deg / 22.5) % 16];
+  };
+  const UV_LABEL = (uv) => uv <= 2 ? 'Low' : uv <= 5 ? 'Moderate' : uv <= 7 ? 'High' : uv <= 10 ? 'Very High' : 'Extreme';
+
+  const strip = document.getElementById('weather-strip');
+  const src = document.getElementById('weather-source');
+
+  try {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}` +
+      `&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,` +
+      `weathercode,windspeed_10m_max,winddirection_10m_dominant,uv_index_max` +
+      `&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America%2FTijuana` +
+      `&start_date=2026-03-13&end_date=2026-03-15`;
+
+    const res = await fetch(url);
+    const d = await res.json();
+    const daily = d.daily;
+
+    strip.innerHTML = DATES.map((date, i) => {
+      const idx = daily.time.indexOf(date);
+      if (idx === -1) return `<div class="weather-card"><div class="weather-day-label">${DAY_LABELS[i]}</div><div class="weather-condition" style="color:var(--muted)">No data</div></div>`;
+      const hi = Math.round(daily.temperature_2m_max[idx]);
+      const lo = Math.round(daily.temperature_2m_min[idx]);
+      const code = daily.weathercode[idx];
+      const rain = daily.precipitation_probability_max[idx];
+      const wind = Math.round(daily.windspeed_10m_max[idx]);
+      const dir = WIND_DIR(daily.winddirection_10m_dominant[idx]);
+      const uv = Math.round(daily.uv_index_max[idx]);
+      return `
+        <div class="weather-card">
+          <div class="weather-day-label">${DAY_LABELS[i]}</div>
+          <div class="weather-icon">${WMO_ICON[code] || '🌡️'}</div>
+          <div class="weather-condition">${WMO_DESC[code] || 'Unknown'}</div>
+          <div class="weather-temps">${hi}° <span>/ ${lo}°</span></div>
+          <div class="weather-meta">
+            💨 ${dir} ${wind} mph<br>
+            ☔ ${rain}% rain<br>
+            ☀️ UV: ${UV_LABEL(uv)} (${uv})
+          </div>
+        </div>`;
+    }).join('');
+
+    const now = new Date();
+    src.textContent = `Open-Meteo · El Rosario, Baja · updated ${now.toLocaleDateString('en-US',{month:'short',day:'numeric'})}`;
+
+  } catch(e) {
+    strip.innerHTML = `<div class="weather-card" style="grid-column:1/-1;text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.7rem;padding:20px;">Weather unavailable — check connection</div>`;
+    src.textContent = '';
+  }
+}
+
+// ── PUNCHLIST DATA (all prep sections, no itinerary, no torque) ──
+const data = [
+  {
+    section: "🏍️ KTM 300 XCW — Mechanical",
+    items: [
+      { label: "Install rear shock swing arm bolt", note: "Torque to spec — check KTM service manual for 2025 XCW 300" },
+      { label: "Transmission oil change", note: "Gearbox takes Motorex Transmission 10W/40. Manual says 800ml but fill to weep hole — typically 700–730ml in practice. Do NOT overfill, causes clutch drag.", tag: "BUY" },
+      { label: "Top off the oil injection tank", note: "Your 2025 XCW is TBI with oil injection — NO premix needed. Fill oil tank (above gas cap) with Motorex Cross Power 2T. Expect ~5 tanks of gas per refill. Do NOT run it dry.", tag: "IMPORTANT" },
+      { label: "Fix rear spoke(s)", note: "Re-lace or replace damaged spoke(s), then true the wheel" },
+      { label: "Torque all rear spokes", note: "KTM 300 XCW spec: 6 Nm (not 4). Use a calibrated spoke wrench, skip-2 pattern, work in passes. Check runout after.", tag: "TORQUE SPEC" },
+      { label: "Check all spoke tension front wheel too", note: "While you're at it — Baja is rough" },
+    ]
+  },
+  {
+    section: "🏍️ KTM 300 XCW — Accessories",
+    items: [
+      { label: "Install handlebar bag", note: "Mount and route straps clear of controls. Check nothing binds at full lock left and right" },
+      { label: "Load handlebar bag with essentials", note: "Trail snacks, phone, small first aid, documents" },
+    ]
+  },
+  {
+    section: "🏍️ KTM 300 XCW — Spare Parts Kit",
+    items: [
+      { label: "Assemble spare parts kit", note: "Levers, spare tube (or plugs), chain links + master link, throttle cable, spark plug, zip ties, JB Weld, duct tape, bead buddy" },
+      { label: "Tire plug kit + CO2 or pump", note: "Roctane or similar — make sure it works with mousse if running one" },
+      { label: "Tool kit dialed in", note: "T-handles, spoke wrench, chain breaker, tire irons. Your compact trail kit should cover most of it" },
+      { label: "Coolant top-off fluid on hand", note: "Premixed engine ice or Motorex" },
+      { label: "Empty gas can", note: "Critical in Baja — stations can be far apart. 1–2 gallon minimum. Keep it strapped and vented properly", tag: "BUY" },
+      { label: "KTM registration in handlebar bag or on bike", note: "Required at checkpoints. Do not forget this. Mexico federales will check it", tag: "CRITICAL" },
+    ]
+  },
+  {
+    section: "🔗 Motorcycle Transport — Tacoma / Al Cab",
+    items: [
+      { label: "Rear moto hitch carrier inspected", note: "Check welds, receiver fit, and any cracks or flex. Tacoma 2016 tow receiver is rated — confirm your carrier weight rating covers the KTM (~100kg wet)" },
+      { label: "Tie downs x4 — all in good shape", note: "No frayed straps or sketchy hooks. Soft loops on the bars, straps to carrier rails. Front and rear tie-down points on the bike" },
+      { label: "Moto secure with front forks compressed", note: "Compress forks with tie-downs so the bike doesn't bounce. Rear tie-down from subframe or swingarm — not plastics" },
+      { label: "Shake test before leaving driveway", note: "Give the whole setup a hard shake. If anything moves, fix it before you hit the freeway" },
+      { label: "Rear lights not blocked", note: "Make sure brake lights and turn signals are visible — or add a supplemental light bar to the carrier" },
+      { label: "Check carrier clearance on bumps", note: "Loaded camper + moto on back changes your rear geometry. Check for bottoming on dips in the driveway before you load up for real" },
+      { label: "Al Cab camper tie-downs and turnbuckles tight", note: "Make sure the camper is fully secured to the truck before adding the moto weight to the rear" },
+    ]
+  },
+  {
+    section: "🦺 Wolf Vest / Riding Gear",
+    items: [
+      { label: "Fit check the Wolf vest", note: "Make sure straps are adjusted, nothing is loose or rubbing" },
+      { label: "Inspect airbag canister / charge status", note: "Check manufacturer spec for service interval — some require annual replacement" },
+      { label: "Full gear check", note: "Helmet, goggles, boots, gloves, knee braces, jersey, pants — all accounted for and packed" },
+      { label: "Hydration pack cleaned and filled", note: "Bladder clean, no mold, hose clear" },
+    ]
+  },
+  {
+    section: "🛻 Truck",
+    items: [
+      { label: "Full wash — truck exterior", note: "Include wheel wells and undercarriage if possible before Baja dust hits" },
+      { label: "Check and inflate all tires", note: "Don't forget spare. Baja roads eat tires. Check pressure cold before loading" },
+      { label: "Check Tacoma fluids", note: "Engine oil, coolant, brake fluid, power steering — quick once-over before a long haul" },
+      { label: "Fuel up before departure", note: "Top off — plan your fuel stops, Baja stations can be sparse and some only take cash" },
+      { label: "Confirm GVWR not exceeded", note: "Tacoma + Al Cab camper + moto on carrier + gear adds up fast. 2016 Tacoma GVWR is around 4,700–5,000 lbs depending on config. Don't ignore this in Baja — bad roads amplify overload stress" },
+    ]
+  },
+  {
+    section: "🏕️ Camper / Truck Bed",
+    items: [
+      { label: "Camper interior clean", note: "" },
+      { label: "Bedding organized", note: "Sleeping bag, pillow, pad — all packed and accessible" },
+      { label: "Water jugs filled", note: "Bring more than you think you need" },
+      { label: "Food and cooler stocked", note: "Ice, easy meals, snacks for the trail days" },
+      { label: "Misc camping odds and ends", note: "Headlamp, camp chair, lighter, small lantern, toilet paper, hand sanitizer" },
+      { label: "Truck spare parts and tools stowed", note: "Jumper cables, tow strap, basic socket set, tire plug kit for truck, Fix-a-Flat" },
+      { label: "Starlink Mini Roam dish mounted low profile on Al Cab roof", note: "Mini is small enough to tuck flat on the camper roof easily. Mount it with a low profile bracket — flush to the roofline so it doesn't stand out. Needs clear sky view, avoid mounting under a roof rack overhang" },
+      { label: "Starlink Mini cable routing hidden", note: "Run cable inside or along the camper wall. The Mini cable is thinner than standard Starlink — easier to grommet through the camper body cleanly" },
+      { label: "Starlink Mini power confirmed", note: "Mini Roam draws ~25W — much more efficient than standard Starlink. A basic 12V setup or small battery bank handles it easily. Confirm your power source and connection before the trip" },
+      { label: "Starlink Mini Roam plan — confirm Mexico coverage active", note: "Roam plan includes Mexico natively — no extra steps needed unlike residential plans. Just confirm your account is active and the dish is healthy in the app before you leave", tag: "CONFIRM" },
+    ]
+  },
+  {
+    section: "🧢 Personal Riding Gear",
+    items: [
+      { label: "Helmet", note: "Check fit, no cracks, visor secure" },
+      { label: "Helmet charger", note: "For comms system — pack in an easily accessible spot, not buried in gear" },
+      { label: "Radio + radio charger", note: "Charge both before leaving. Bring charger in the camper for nightly top-offs" },
+      { label: "Navigation phone + charger", note: "Dedicated nav phone charged and mounted. Offline maps loaded. Charger in camper" },
+      { label: "Motorcycle boots", note: "Check buckles and closures — Baja is not the place to find out a buckle is broken" },
+      { label: "Chest protector", note: "" },
+      { label: "Body armor / roost deflector", note: "" },
+      { label: "Knee braces x2", note: "Check hinges and straps. Bring extra strap velcro if worn" },
+      { label: "Elbow guards", note: "" },
+      { label: "3x riding pants", note: "" },
+      { label: "3x jerseys", note: "" },
+      { label: "3x base layer undershirts", note: "Moisture wicking — crucial in Baja heat" },
+      { label: "3x riding socks", note: "Tall moto socks to protect shins under boots" },
+      { label: "3x pairs of gloves", note: "At least one pair short cuff for heat, one full cuff for brush" },
+      { label: "2x goggles", note: "One tinted, one clear for low light / dust" },
+      { label: "Spare goggle lens / roll-offs", note: "Baja dust will wreck a lens fast" },
+      { label: "2x neck gaiter / buff", note: "Dust protection is non-negotiable out there" },
+      { label: "Underwear / base layers for off-bike days", note: "Easy to forget when packing only moto gear" },
+      { label: "Casual clothes for camp / town", note: "At least 1-2 sets — you will want to get out of gear at the end of the day" },
+      { label: "Sunglasses", note: "For driving and off-bike time" },
+      { label: "Sunscreen", note: "Baja sun is no joke, especially on your neck and any exposed skin" },
+      { label: "Lip balm with SPF", note: "Overlooked every time" },
+      { label: "Personal medications / first aid", note: "Ibuprofen, antidiarrheal (Baja belly is real), blister pads, moleskin, any prescriptions" },
+      { label: "Small personal first aid kit for riding", note: "Tourniquet, Israeli bandage, trauma shears — something beyond a basic kit if you're riding remote" },
+      { label: "Baby wipes", note: "No shower situation MVP. Pack a lot of them" },
+    ]
+  },
+  {
+    section: "🍊 Food, Water & Hygiene",
+    items: [
+      { label: "Water — lots of it", note: "Do NOT drink tap water in Mexico. Bring sealed jugs. Budget at least 1 gallon per person per day minimum" },
+      { label: "Water filter or purification tabs as backup", note: "Sawyer Squeeze or Steripen — insurance if you run low on bottled water", tag: "BUY" },
+      { label: "Protein bars", note: "Easy trail food and emergency calories if a ride goes long" },
+      { label: "Fresh fruit", note: "Grab at a local market once you're across — bananas, oranges, apples travel well and are dirt cheap in Baja" },
+      { label: "Trail snacks", note: "Jerky, nuts, dried mango, whatever you ride with. Stock the handlebar bag from this stash" },
+      { label: "Easy camp meals", note: "Instant oatmeal, ramen, canned goods, freeze dried — stuff that survives without refrigeration" },
+      { label: "Cooking basics", note: "Camp stove, fuel canister, lighter, small pot, utensils, camp mug. Get the coffee situation sorted" },
+      { label: "Cooler stocked with ice", note: "Get ice day of departure. Restock at tiendas in Baja — usually cheap and easy to find" },
+      { label: "Dish soap + small sponge", note: "" },
+      { label: "Sunscreen — multiple bottles", note: "High SPF. Face, neck, and hands get absolutely wrecked on riding days" },
+      { label: "Lip balm with SPF", note: "Always forgotten, always needed" },
+      { label: "Clean towels x2", note: "Quick dry microfiber packs small and dries fast" },
+      { label: "Solar shower bag", note: "5 gallon black bag heats up off the tailgate — cheap and works great. Fill it in the morning, hot shower by afternoon" },
+      { label: "Toothbrush + toothpaste", note: "Use bottled water to rinse — not tap" },
+      { label: "Soap / body wash + shampoo", note: "" },
+      { label: "Deodorant", note: "You will need it" },
+      { label: "Toilet paper + small trowel", note: "For when nature calls on the trail. Pack it out" },
+      { label: "Hand sanitizer x2", note: "One for camp, one in the pack or handlebar bag" },
+      { label: "Antidiarrheal meds", note: "Imodium or similar. Baja belly is real even when you're careful. Non-negotiable", tag: "IMPORTANT" },
+      { label: "Antacids", note: "Tums or Pepto — spicy food plus long dusty days" },
+      { label: "Trash bags", note: "A few heavy duty bags. Pack it in, pack it out" },
+    ]
+  },
+  {
+    section: "🎒 Wolf Bag — Trail Pack",
+    items: [
+      { label: "Repair Camelback bite valve", note: "Replace or fix before the trip — not something you want failing on a hot Baja day. Replacement valves are cheap, just swap it" },
+      { label: "Camelback cleaned and filled", note: "Bladder clean, no mold smell, hose clear and flowing. Fill with cold water morning of each ride" },
+      { label: "Spare tools packed in bag", note: "T-handles (8, 10mm), spoke wrench, levers, zip ties, duct tape, spare master link — enough to handle a trailside fix without the full kit" },
+      { label: "Tire plug kit + CO2 or mini pump", note: "Keep this in the Wolf bag, not just the truck" },
+      { label: "Trail snacks loaded", note: "Heat-stable picks for Baja desert: Medjool dates, Clif bars, Picky Bars, salted nuts, beef jerky. Avoid anything with chocolate — it will be a melted mess. Electrolyte chews or Precision Hydration tabs are solid too" },
+      { label: "Electrolyte packets", note: "Liquid IV, LMNT, or Nuun tabs. Hydration alone isn't enough in desert heat — you need the salts. Pack several per day of riding" },
+      { label: "Light jacket packed", note: "Baja mornings and evenings can surprise you, and desert temps drop fast after sunset. Packable wind layer takes up almost no space" },
+      { label: "Antenna mounted solid on bike", note: "Check mount, no wobble, base connection tight. Give it a firm tug — if it moves, fix it before Baja vibration does it for you" },
+      { label: "Radio connected and tested", note: "Power on, transmit test, confirm it's working before departure" },
+      { label: "Radio extension cables inspected", note: "Check both ends of every cable — connectors seated, no fraying, no cracked insulation. Vibration and heat are hard on connections" },
+      { label: "Small first aid in Wolf bag", note: "Tourniquet, gauze, ace bandage, blister pads, ibuprofen, antiseptic wipe. Separate from the big kit in the truck" },
+      { label: "Phone mount + nav ready", note: "Phone secured in mount, Gaia GPS open with offline maps loaded, brightness up for sun readability" },
+    ]
+  },
+  {
+    section: "📋 Admin / Logistics",
+    items: [
+      { label: "Mexico auto insurance", note: "Required. Don't cross without it — get a daily policy if you don't have annual coverage. MexPro or Baja Bound are solid options" },
+      { label: "Motorcycle insurance for Mexico", note: "Your truck policy likely won't cover the KTM. Some providers cover both or offer moto riders separately — check before you go", tag: "CRITICAL" },
+      { label: "Passports / IDs packed", note: "" },
+      { label: "KTM title or registration copy", note: "Bring a copy in addition to the one on the bike — keep one in the truck glovebox" },
+      { label: "Cash (pesos)", note: "ATMs in Baja work but bring some pesos for tolls, gas, tacos, and checkpoints" },
+      { label: "Download offline maps", note: "Gaia GPS with Baja topo loaded, iOverlander for camp spots. Do this on WiFi before you leave — cell data across the border is unpredictable" },
+      { label: "Emergency contacts and route shared with someone at home", note: "" },
+      { label: "Satellite communicator charged", note: "SPOT, inReach, or similar. If you go down solo in Baja, this is not optional" },
+    ]
+  }
+];
+
+// ── TORQUE DATA ──
+const torqueData = [
+  {
+    group: "Wheels",
+    rows: [
+      { fastener: "Front axle spindle (M20x1.5)", nm: "35 Nm", ftlb: "25.8 ft-lb", loctite: false, note: "Pump brakes + bounce forks before final torque to settle alignment. No Loctite." },
+      { fastener: "Rear axle nut (M20x1.5)", nm: "80 Nm", ftlb: "59 ft-lb", loctite: false, note: "Nut on RIGHT (disc/caliper) side. Grease axle shaft lightly. No Loctite. 2024+ uses 22mm axle." },
+      { fastener: "Spoke nipples front & rear (M4.5/M5)", nm: "5–6 Nm", ftlb: "3.7–4.4 ft-lb", loctite: false, note: "Skip-2 pattern, multiple passes. Check runout after." },
+    ]
+  },
+  {
+    group: "Triple Clamps",
+    rows: [
+      { fastener: "Bottom triple clamp — forged", nm: "15 Nm", ftlb: "11.1 ft-lb", loctite: false, note: "Tighten FIRST. Set fork height before torquing." },
+      { fastener: "Bottom triple clamp — milled/CNC", nm: "12 Nm", ftlb: "8.9 ft-lb", loctite: false, note: "Milled variant only. Know which you have." },
+      { fastener: "Top triple clamp — forged", nm: "20 Nm", ftlb: "14.8 ft-lb", loctite: false, note: "Tighten AFTER bottom clamp bolts." },
+      { fastener: "Top triple clamp — milled/CNC", nm: "17 Nm", ftlb: "12.5 ft-lb", loctite: false, note: "Milled variant only." },
+      { fastener: "Top steering stem nut (M20x1.5)", nm: "10 Nm", ftlb: "7.4 ft-lb", loctite: false, note: "Bearing preload — snug, not cranked. Feel-based as much as torque-based." },
+    ]
+  },
+  {
+    group: "Suspension",
+    rows: [
+      { fastener: "Swingarm pivot nut (M16x1.5)", nm: "100 Nm", ftlb: "73.8 ft-lb", loctite: false, note: "Recheck periodically — backs off. Some riders run 5–10% below spec for more rear compliance." },
+      { fastener: "Shock absorber top bolt (M12)", nm: "80 Nm", ftlb: "59 ft-lb", loctite: true, note: "" },
+      { fastener: "Shock absorber bottom bolt (M12)", nm: "80 Nm", ftlb: "59 ft-lb", loctite: true, note: "" },
+    ]
+  },
+  {
+    group: "Brakes & Sprockets",
+    rows: [
+      { fastener: "Front brake disc bolts (M6)", nm: "14 Nm", ftlb: "10.3 ft-lb", loctite: true, note: "" },
+      { fastener: "Rear brake disc bolts (M6)", nm: "14 Nm", ftlb: "10.3 ft-lb", loctite: true, note: "" },
+      { fastener: "Front brake caliper bolts (M8)", nm: "25 Nm", ftlb: "18.4 ft-lb", loctite: false, note: "" },
+      { fastener: "Rear sprocket nuts (M8)", nm: "35 Nm", ftlb: "25.8 ft-lb", loctite: true, note: "Torque the NUTS not the screws." },
+      { fastener: "Front sprocket bolt (M10)", nm: "60 Nm", ftlb: "44.3 ft-lb", loctite: true, note: "" },
+    ]
+  },
+  {
+    group: "Engine Mounts",
+    rows: [
+      { fastener: "⚠️ Engine brace bolts (M8) — into ALUMINUM", nm: "25 Nm", ftlb: "18.4 ft-lb", loctite: false, note: "CRITICAL: Do NOT use the generic M10 spec of 60 Nm. These thread into aluminum and will strip. Many 2023-2025 owners have destroyed these.", critical: true },
+      { fastener: "Engine attachment bolt (M10)", nm: "60 Nm", ftlb: "44.3 ft-lb", loctite: false, note: "Main engine mount. NOT the M8 brace bolts." },
+    ]
+  },
+  {
+    group: "General Chassis",
+    rows: [
+      { fastener: "Remaining M6 nuts", nm: "15 Nm", ftlb: "11.1 ft-lb", loctite: false, note: "" },
+      { fastener: "Remaining M6 screws", nm: "10 Nm", ftlb: "7.4 ft-lb", loctite: false, note: "" },
+      { fastener: "Remaining M8 screws", nm: "25 Nm", ftlb: "18.4 ft-lb", loctite: false, note: "" },
+      { fastener: "Remaining M10 screws", nm: "45 Nm", ftlb: "33.2 ft-lb", loctite: false, note: "" },
+    ]
+  }
+];
+
+function renderChecklist() {
+  const container = document.getElementById('checklist');
+  container.innerHTML = '';
+  const saved = JSON.parse(localStorage.getItem('baja-checks') || '{}');
+
+  data.forEach((section, si) => {
+    const sec = document.createElement('div');
+    sec.className = 'section';
+
+    const hdr = document.createElement('div');
+    hdr.className = 'section-header';
+    hdr.innerHTML = `<span>${section.section}</span><span class="section-count" id="sc-${si}"></span>`;
+    sec.appendChild(hdr);
+
+    const checkableItems = section.items.filter(item => !item.label.startsWith('──'));
+    const pending = checkableItems.filter((item) => !saved[`${si}-${section.items.indexOf(item)}`]);
+    const done = checkableItems.filter((item) => saved[`${si}-${section.items.indexOf(item)}`]);
+    const orderedCheckable = [
+      ...pending.map(item => ({ item, ii: section.items.indexOf(item) })),
+      ...done.map(item => ({ item, ii: section.items.indexOf(item) }))
+    ];
+
+    // Build a map of checkable item order for interleaving dividers
+    section.items.forEach((item, ii) => {
+      if (item.label.startsWith('──')) {
+        const div = document.createElement('div');
+        div.style.cssText = 'padding: 14px 16px 4px; font-family: "DM Mono", monospace; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); opacity: 0.8;';
+        div.textContent = item.label.replace(/──\s*/g, '').replace(/\s*──/g, '');
+        sec.appendChild(div);
+      } else {
+        const key = `${si}-${ii}`;
+        const isDone = !!saved[key];
+        const div = document.createElement('div');
+        div.className = 'item' + (isDone ? ' done' : '');
+        div.innerHTML = `
+          <div class="checkbox"><span class="check-icon">✓</span></div>
+          <div>
+            ${item.tag ? `<div class="tag">${item.tag}</div>` : ''}
+            <div class="label">${item.label}</div>
+            ${item.note ? `<div class="note">${item.note}</div>` : ''}
+          </div>`;
+        div.onclick = () => toggle(key, div);
+        sec.appendChild(div);
+      }
+    });
+
+    container.appendChild(sec);
+  });
+
+  updateProgress();
+}
+
+function toggle(key, el) {
+  const saved = JSON.parse(localStorage.getItem('baja-checks') || '{}');
+  const nowDone = !saved[key];
+  if (nowDone) saved[key] = true; else delete saved[key];
+  localStorage.setItem('baja-checks', JSON.stringify(saved));
+
+  const section = el.parentElement;
+
+  if (nowDone) {
+    el.classList.add('done');
+    el.style.transition = 'opacity 0.25s';
+    el.style.opacity = '0.3';
+    setTimeout(() => {
+      section.appendChild(el);
+      el.style.opacity = '1';
+    }, 250);
+  } else {
+    el.classList.remove('done');
+    const firstDone = [...section.querySelectorAll('.item.done')].find(d => d !== el);
+    if (firstDone) section.insertBefore(el, firstDone);
+  }
+
+  updateProgress();
+}
+
+function updateProgress() {
+  const saved = JSON.parse(localStorage.getItem('baja-checks') || '{}');
+  let total = 0, done = 0;
+  data.forEach((section, si) => {
+    let sdone = 0, scount = 0;
+    section.items.forEach((item, ii) => {
+      if (item.label.startsWith('──')) return;
+      total++; scount++;
+      if (saved[`${si}-${ii}`]) { done++; sdone++; }
+    });
+    const el = document.getElementById(`sc-${si}`);
+    if (el) el.textContent = `${sdone}/${scount}`;
+  });
+  document.getElementById('progress-label').textContent = `${done} of ${total} complete`;
+  document.getElementById('progress-bar').style.width = `${total ? (done/total*100) : 0}%`;
+}
+
+function resetAll() {
+  if (confirm('Reset all checkboxes?')) {
+    localStorage.removeItem('baja-checks');
+    renderChecklist();
+  }
+}
+
+renderChecklist();
+fetchWeather();
+</script>
+</body>
+</html>
