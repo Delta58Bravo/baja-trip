@@ -30,10 +30,24 @@
   }
 
   header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     border-left: 4px solid var(--orange);
     padding-left: 16px;
     margin-bottom: 36px;
+    gap: 16px;
   }
+
+  .header-logo {
+    height: 52px;
+    width: auto;
+    opacity: 0.92;
+    flex-shrink: 0;
+    border-radius: 4px;
+  }
+
+  .header-text { flex: 1; }
 
   h1 {
     font-family: 'Bebas Neue', sans-serif;
@@ -562,8 +576,11 @@
 </script>
 
 <header>
-  <h1>Baja Trip</h1>
-  <div class="subtitle">KTM 300 XCW 2025 &nbsp;·&nbsp; Tacoma &nbsp;·&nbsp; Baja</div>
+  <div class="header-text">
+    <h1>Baja Trip</h1>
+    <div class="subtitle">KTM 300 XCW 2025 &nbsp;·&nbsp; Tacoma &nbsp;·&nbsp; Baja</div>
+  </div>
+  <img class="header-logo" src="wlf-logo.jpg" alt="WLF" />
 </header>
 
 <nav class="tab-nav">
