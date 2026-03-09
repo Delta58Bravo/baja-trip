@@ -560,6 +560,7 @@
   <button class="tab-btn active" onclick="switchTab('itinerary', this)">🏁 Itinerary</button>
   <button class="tab-btn" onclick="switchTab('punchlist', this)">✅ Punchlist</button>
   <button class="tab-btn" onclick="switchTab('torque', this)">🔩 Torque Ref</button>
+  <button class="tab-btn" onclick="switchTab('budget', this)">💰 Budget</button>
 </nav>
 
 <!-- ITINERARY TAB -->
@@ -670,6 +671,10 @@
 <!-- TORQUE TAB -->
 <div class="tab-panel" id="tab-torque">
   <div id="torque-table"></div>
+</div>
+
+<div class="tab-panel" id="tab-budget">
+  <div id="budget-content"></div>
 </div>
 
 <script>
@@ -1117,8 +1122,131 @@ function renderTorque() {
   });
 }
 
+// ── BUDGET DATA ──
+const EXCHANGE_RATE = 17.2; // USD → MXN (as of March 2026)
+
+const budgetData = {
+  fuel: {
+    label: "⛽ Fuel",
+    note: "2016 Tacoma · 33\" tires · canopy camper · ~14–15 mpg · Pemex ~$4.75/gal",
+    note2: "Fill up US side before crossing. Top off in San Felipe on the way home.",
+    items: [
+      { leg: "Ladera Ranch → Border", miles: 70, usd: 22, note: "Fill US side — cheaper" },
+      { leg: "Border → El Rosario", miles: 221, usd: 70, note: "Pemex in El Rosario" },
+      { leg: "El Rosario → Catavina", miles: 76, usd: 24, note: "Fill in El Rosario before leaving" },
+      { leg: "Catavina → Gonzaga Bay", miles: 100, usd: 32, note: "Mix of Mex 1 + dirt road" },
+      { leg: "Gonzaga Bay → Home (via San Felipe)", miles: 400, usd: 127, note: "Top off San Felipe — ~$4.75/gal Pemex" },
+    ]
+  },
+  food: {
+    label: "🌮 Food",
+    note: "Event meals (Mamá's breakfast, welcome burgers, carne asada) are included in event cost.",
+    note2: "Catavina has almost no food options — pack Sunday lunch.",
+    items: [
+      { leg: "Friday — Arrival", miles: null, usd: 10, note: "Tips, drinks at Mamá's (food included)" },
+      { leg: "Saturday — Ride Day", miles: null, usd: 20, note: "Beer, extras. Breakfast + carne asada included." },
+      { leg: "Sunday — Catavina + Gonzaga", miles: null, usd: 30, note: "Pack lunch. Dinner at Gonzaga Bay (Rancho Grande or Alfonsinas bar)" },
+      { leg: "Monday — Drive Home", miles: null, usd: 20, note: "San Felipe tacos + road food" },
+    ]
+  },
+  camping: {
+    label: "🏕️ Camping",
+    note: "Sunday night at Gonzaga Bay. Sleeping in truck.",
+    items: [
+      { leg: "Rancho Grande — Gonzaga Bay", miles: null, usd: 20, note: "Gated beachfront camp · ~400 pesos/night · palapas + outhouses · security at gate" },
+    ]
+  }
+};
+
+function mxn(usd) {
+  return Math.round(usd * EXCHANGE_RATE).toLocaleString();
+}
+
+function renderBudget() {
+  const container = document.getElementById('budget-content');
+  if (!container) return;
+  container.innerHTML = '';
+
+  // Exchange rate header
+  const rateDiv = document.createElement('div');
+  rateDiv.style.cssText = 'padding: 12px 16px; font-family: "DM Mono", monospace; font-size: 0.68rem; color: var(--orange); letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.06);';
+  rateDiv.textContent = `Exchange rate: $1 USD = ${EXCHANGE_RATE} MXN  ·  March 2026`;
+  container.appendChild(rateDiv);
+
+  let grandTotal = 0;
+
+  Object.values(budgetData).forEach(section => {
+    const secDiv = document.createElement('div');
+    secDiv.style.cssText = 'margin-bottom: 8px;';
+
+    // Section header
+    const hdr = document.createElement('div');
+    hdr.style.cssText = 'background: rgba(255,120,0,0.12); padding: 10px 16px; font-family: "Bebas Neue", sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--orange);';
+    hdr.textContent = section.label;
+    secDiv.appendChild(hdr);
+
+    if (section.note) {
+      const noteDiv = document.createElement('div');
+      noteDiv.style.cssText = 'padding: 6px 16px 2px; font-family: "DM Mono", monospace; font-size: 0.65rem; color: var(--muted); line-height: 1.5;';
+      noteDiv.textContent = section.note;
+      secDiv.appendChild(noteDiv);
+    }
+    if (section.note2) {
+      const noteDiv2 = document.createElement('div');
+      noteDiv2.style.cssText = 'padding: 0 16px 6px; font-family: "DM Mono", monospace; font-size: 0.65rem; color: var(--orange); opacity: 0.7; line-height: 1.5;';
+      noteDiv2.textContent = '⚠️ ' + section.note2;
+      secDiv.appendChild(noteDiv2);
+    }
+
+    let sectionTotal = 0;
+    section.items.forEach(item => {
+      sectionTotal += item.usd;
+      grandTotal += item.usd;
+
+      const row = document.createElement('div');
+      row.style.cssText = 'display: grid; grid-template-columns: 1fr auto auto; gap: 8px; padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); align-items: start;';
+
+      const legDiv = document.createElement('div');
+      legDiv.innerHTML = `<div style="font-size:0.85rem; font-weight:500; line-height:1.3;">${item.leg}</div>${item.note ? `<div style="font-family:'DM Mono',monospace; font-size:0.63rem; color:var(--muted); margin-top:2px;">${item.note}</div>` : ''}`;
+
+      const usdDiv = document.createElement('div');
+      usdDiv.style.cssText = 'font-family: "DM Mono", monospace; font-size: 0.85rem; color: #fff; white-space: nowrap; text-align: right;';
+      usdDiv.textContent = `$${item.usd}`;
+
+      const mxnDiv = document.createElement('div');
+      mxnDiv.style.cssText = 'font-family: "DM Mono", monospace; font-size: 0.75rem; color: var(--muted); white-space: nowrap; text-align: right;';
+      mxnDiv.textContent = `$${mxn(item.usd)} MXN`;
+
+      row.appendChild(legDiv);
+      row.appendChild(usdDiv);
+      row.appendChild(mxnDiv);
+      secDiv.appendChild(row);
+    });
+
+    // Section subtotal
+    const subDiv = document.createElement('div');
+    subDiv.style.cssText = 'display: flex; justify-content: space-between; padding: 8px 16px; background: rgba(255,255,255,0.03); font-family: "DM Mono", monospace; font-size: 0.75rem;';
+    subDiv.innerHTML = `<span style="color:var(--muted);">Subtotal</span><span style="color:#fff;">$${sectionTotal} USD &nbsp;·&nbsp; $${mxn(sectionTotal)} MXN</span>`;
+    secDiv.appendChild(subDiv);
+
+    container.appendChild(secDiv);
+  });
+
+  // Grand total
+  const totalDiv = document.createElement('div');
+  totalDiv.style.cssText = 'margin: 16px; padding: 14px 16px; background: rgba(255,120,0,0.15); border: 1px solid rgba(255,120,0,0.3); border-radius: 6px;';
+  totalDiv.innerHTML = `
+    <div style="font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:2px; color:var(--orange); margin-bottom:6px;">TOTAL TRIP BUDGET</div>
+    <div style="font-size:1.4rem; font-weight:600;">$${grandTotal} <span style="font-size:0.85rem; color:var(--muted);">USD</span></div>
+    <div style="font-family:'DM Mono',monospace; font-size:0.85rem; color:var(--muted); margin-top:2px;">$${mxn(grandTotal)} MXN</div>
+    <div style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--muted); margin-top:8px;">Fuel + food + camping · Solo · Does not include event registration or Mexican insurance.</div>
+  `;
+  container.appendChild(totalDiv);
+}
+
 renderChecklist();
 renderTorque();
+renderBudget();
 fetchWeather();
 </script>
 
