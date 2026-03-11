@@ -1,7 +1,7 @@
 // sw.js — Service Worker for Baja Trip PWA
 // Caches all app assets on install so the app works fully offline
 
-const CACHE_NAME = 'baja-trip-v2';
+const CACHE_NAME = 'baja-trip-v3';
 
 // Everything needed to run the app offline
 const ASSETS = [
@@ -9,6 +9,7 @@ const ASSETS = [
   './index.html',
   './wlf-logo.jpg',
   './manifest.json',
+  './anita-logo.png',
   './icon-192.png',
   './icon-512.png',
   './docs/Chubb_Cover_Letter.pdf',
