@@ -444,6 +444,32 @@
     margin-top: -18px;
     margin-bottom: 20px;
   }
+  /* ── POLICY DOCS ── */
+  .doc-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .doc-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.2s;
+  }
+  .doc-card:hover { border-color: var(--orange); }
+  .doc-icon { font-size: 1.6rem; flex-shrink: 0; }
+  .doc-info { flex: 1; }
+  .doc-title { font-size: 0.88rem; font-weight: 500; line-height: 1.3; }
+  .doc-meta { font-family: 'DM Mono', monospace; font-size: 0.63rem; color: var(--muted); margin-top: 3px; }
+  .doc-arrow { font-size: 1rem; color: var(--orange); opacity: 0.7; }
+
   /* ── INSURANCE ── */
   .ins-alert {
     background: #2a0000;
@@ -832,6 +858,35 @@
 </div>
 
 <div class="tab-panel" id="tab-insurance">
+
+  <!-- POLICY DOCUMENTS -->
+  <div class="ins-section-label">Policy Documents</div>
+  <div class="doc-grid">
+    <a class="doc-card" href="docs/Chubb_Cover_Letter.pdf" target="_blank">
+      <div class="doc-icon">📄</div>
+      <div class="doc-info">
+        <div class="doc-title">Chubb Cover Letter</div>
+        <div class="doc-meta">Claim instructions · Emergency contacts · What to do in an accident</div>
+      </div>
+      <div class="doc-arrow">↗</div>
+    </a>
+    <a class="doc-card" href="docs/NZ46210356.pdf" target="_blank">
+      <div class="doc-icon">📄</div>
+      <div class="doc-info">
+        <div class="doc-title">Policy NZ46210356</div>
+        <div class="doc-meta">Truck / Trailer / KTM on carrier · Premiere · Valid Mar 13–17, 2026</div>
+      </div>
+      <div class="doc-arrow">↗</div>
+    </a>
+    <a class="doc-card" href="docs/NZ46210357.pdf" target="_blank">
+      <div class="doc-icon">📄</div>
+      <div class="doc-info">
+        <div class="doc-title">Policy NZ46210357</div>
+        <div class="doc-meta">KTM 300 XCW — Standalone Motorcycle · Premiere · Valid Mar 13–17, 2026</div>
+      </div>
+      <div class="doc-arrow">↗</div>
+    </a>
+  </div>
 
   <!-- EMERGENCY ALERT -->
   <div class="ins-alert">
