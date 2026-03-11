@@ -452,6 +452,83 @@
     margin-top: -18px;
     margin-bottom: 20px;
   }
+  /* ── ROUTE TAB ── */
+  .fuel-stop {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 13px 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 6px;
+  }
+  .fuel-stop.warning { border-color: #cc7700; background: #1e1500; }
+  .fuel-stop.danger  { border-color: #cc2200; background: #1e0500; }
+  .fuel-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .fuel-badge.ok      { background: #0a2a0a; color: #4caf50; }
+  .fuel-badge.caution { background: #2a1a00; color: #ff9800; }
+  .fuel-badge.critical{ background: #2a0500; color: #ff4444; }
+  .fuel-info { flex: 1; }
+  .fuel-name { font-size: 0.9rem; font-weight: 500; line-height: 1.3; }
+  .fuel-meta { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--muted); margin-top: 3px; line-height: 1.6; }
+  .fuel-warning { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: #ff9800; margin-top: 3px; }
+  .fuel-danger  { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: #ff4444; margin-top: 3px; }
+
+  .coord-card {
+    padding: 11px 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .coord-label { font-size: 0.88rem; font-weight: 500; line-height: 1.3; }
+  .coord-sub   { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--muted); margin-top: 2px; }
+  .coord-val   { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--orange); white-space: nowrap; text-align: right; padding-top: 2px; }
+  .coord-val a { color: inherit; text-decoration: none; }
+
+  .phrase-row {
+    padding: 10px 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 5px;
+  }
+  .phrase-es { font-size: 0.9rem; font-weight: 500; color: var(--orange); }
+  .phrase-en { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+
+  .border-tip {
+    padding: 11px 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  .border-tip .tip-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 4px;
+  }
+
   /* ── POLICY DOCS ── */
   .doc-grid {
     display: grid;
@@ -743,6 +820,7 @@
   <button class="tab-btn" onclick="switchTab('torque', this)">🔩 Torque Ref</button>
   <button class="tab-btn" onclick="switchTab('budget', this)">💰 Budget</button>
   <button class="tab-btn" onclick="switchTab('insurance', this)">🛡️ Insurance</button>
+  <button class="tab-btn" onclick="switchTab('route', this)">🗺️ Route</button>
 </nav>
 
 <!-- ITINERARY TAB -->
@@ -873,6 +951,192 @@
 <!-- TORQUE TAB -->
 <div class="tab-panel" id="tab-torque">
   <div id="torque-table"></div>
+</div>
+
+<div class="tab-panel" id="tab-route">
+
+  <!-- FUEL STOPS -->
+  <div class="ins-section-label">⛽ Fuel Stops — South Bound</div>
+
+  <div class="fuel-stop">
+    <div class="fuel-badge ok">FILL UP</div>
+    <div class="fuel-info">
+      <div class="fuel-name">ARCO — San Ysidro (US Side) <a href="https://maps.app.goo.gl/uV1KoW5itCiZ58UEA" target="_blank" style="font-size:0.72rem;margin-left:6px;text-decoration:none;color:var(--muted);">📍</a></div>
+      <div class="fuel-meta">4604 Palm Ave, San Diego · 6:30 AM meetup point · Top off completely on the US side — cheapest fuel you'll see all trip</div>
+    </div>
+  </div>
+
+  <div class="fuel-stop">
+    <div class="fuel-badge ok">TOP OFF</div>
+    <div class="fuel-info">
+      <div class="fuel-name">Ensenada — Multiple Pemex <a href="https://maps.google.com/?q=Ensenada+Pemex+Baja+California" target="_blank" style="font-size:0.72rem;margin-left:6px;text-decoration:none;color:var(--muted);">📍</a></div>
+      <div class="fuel-meta">~68 miles south of border · Big city, reliable · Top off here — don't skip it</div>
+    </div>
+  </div>
+
+  <div class="fuel-stop">
+    <div class="fuel-badge ok">TOP OFF</div>
+    <div class="fuel-info">
+      <div class="fuel-name">San Quintín — Pemex <a href="https://maps.google.com/?q=San+Quintin+Pemex+Baja+California" target="_blank" style="font-size:0.72rem;margin-left:6px;text-decoration:none;color:var(--muted);">📍</a></div>
+      <div class="fuel-meta">~168 miles south of border · Last comfortable stop before El Rosario</div>
+    </div>
+  </div>
+
+  <div class="fuel-stop warning">
+    <div class="fuel-badge critical">MANDATORY</div>
+    <div class="fuel-info">
+      <div class="fuel-name">El Rosario — Pemex <a href="https://maps.google.com/?q=29.9882,-115.7282" target="_blank" style="font-size:0.72rem;margin-left:6px;text-decoration:none;color:var(--muted);">📍</a></div>
+      <div class="fuel-meta">~220 miles south of border · 29.9882, -115.7282</div>
+      <div class="fuel-danger">⚠️ LAST RELIABLE FUEL before Gonzaga Bay. 217+ miles of nothing ahead. Fill the truck AND any spare cans. Do not leave El Rosario without a full tank.</div>
+    </div>
+  </div>
+
+  <div class="fuel-stop danger">
+    <div class="fuel-badge caution">AVOID</div>
+    <div class="fuel-info">
+      <div class="fuel-name">Catavina — Barrel Vendors Only</div>
+      <div class="fuel-meta">~75 miles SE of El Rosario · 29.7456, -114.7167</div>
+      <div class="fuel-warning">⚠️ Pemex permanently closed. Informal vendors only — gas from barrels at ~$1.50/gal premium. Unreliable supply. Emergency use only, bring cash (pesos). Do NOT count on this stop.</div>
+    </div>
+  </div>
+
+  <div class="fuel-stop danger">
+    <div class="fuel-badge critical">NO FUEL</div>
+    <div class="fuel-info">
+      <div class="fuel-name">Gonzaga Bay — No Reliable Fuel</div>
+      <div class="fuel-meta">Rancho Grande camp · 29.791, -114.411</div>
+      <div class="fuel-danger">⚠️ Do not arrive here expecting to find gas. Arrive with enough to get to San Felipe.</div>
+    </div>
+  </div>
+
+  <div class="ins-section-label" style="margin-top:20px;">⛽ Fuel Stops — Heading Home</div>
+
+  <div class="fuel-stop warning">
+    <div class="fuel-badge critical">MANDATORY</div>
+    <div class="fuel-info">
+      <div class="fuel-name">San Felipe — Pemex <a href="https://maps.google.com/?q=San+Felipe+Pemex+Baja+California" target="_blank" style="font-size:0.72rem;margin-left:6px;text-decoration:none;color:var(--muted);">📍</a></div>
+      <div class="fuel-meta">~115 miles north of Gonzaga Bay via dirt · ~30.0167, -114.8333</div>
+      <div class="fuel-warning">⚠️ Top off here before hitting the highway to Mexicali. Long desert stretch ahead — don't leave San Felipe on a partial tank.</div>
+    </div>
+  </div>
+
+  <div class="fuel-stop">
+    <div class="fuel-badge ok">AS NEEDED</div>
+    <div class="fuel-info">
+      <div class="fuel-name">Mexicali — Multiple Pemex</div>
+      <div class="fuel-meta">Before crossing back to the US · Top off if needed, cheap fuel</div>
+    </div>
+  </div>
+
+  <!-- KEY COORDINATES -->
+  <div class="ins-section-label" style="margin-top:20px;">📍 Key Coordinates — Works Offline</div>
+  <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);margin-bottom:10px;line-height:1.6;">Copy coords into any GPS app. Works when maps links don't.</div>
+
+  <div class="coord-card">
+    <div><div class="coord-label">ARCO — Meetup Point</div><div class="coord-sub">San Ysidro, CA · 6:30 AM Friday</div></div>
+    <div class="coord-val"><a href="https://maps.app.goo.gl/uV1KoW5itCiZ58UEA" target="_blank">32.5415, -117.0354</a></div>
+  </div>
+  <div class="coord-card">
+    <div><div class="coord-label">San Ysidro Border Crossing</div><div class="coord-sub">Southbound vehicle lanes</div></div>
+    <div class="coord-val"><a href="https://maps.google.com/?q=32.5430,-117.0381" target="_blank">32.5430, -117.0381</a></div>
+  </div>
+  <div class="coord-card">
+    <div><div class="coord-label">Taquería el Trailero</div><div class="coord-sub">Breakfast · El Sauzal, Ensenada</div></div>
+    <div class="coord-val"><a href="https://maps.app.goo.gl/mbrDd93rK185Ux799" target="_blank">31.9123, -116.6891</a></div>
+  </div>
+  <div class="coord-card">
+    <div><div class="coord-label">El Rosario — Pemex</div><div class="coord-sub">LAST RELIABLE FUEL</div></div>
+    <div class="coord-val"><a href="https://maps.google.com/?q=29.9882,-115.7282" target="_blank">29.9882, -115.7282</a></div>
+  </div>
+  <div class="coord-card">
+    <div><div class="coord-label">Mamá Espinoza's</div><div class="coord-sub">Check-in · El Rosario</div></div>
+    <div class="coord-val"><a href="https://maps.google.com/?q=Mama+Espinoza+El+Rosario" target="_blank">29.9882, -115.7197</a></div>
+  </div>
+  <div class="coord-card">
+    <div><div class="coord-label">Ride Meeting — Baseball Field</div><div class="coord-sub">Saturday 8:45 AM · NOT at Mamá's</div></div>
+    <div class="coord-val"><a href="https://maps.google.com/?q=29.9882,-115.7234" target="_blank">29.9882, -115.7234</a></div>
+  </div>
+  <div class="coord-card">
+    <div><div class="coord-label">Catavina — Custom Trails</div><div class="coord-sub">WLF / Luke trails · Sunday</div></div>
+    <div class="coord-val"><a href="https://maps.google.com/?q=29.7456,-114.7167" target="_blank">29.7456, -114.7167</a></div>
+  </div>
+  <div class="coord-card">
+    <div><div class="coord-label">Rancho Grande — Gonzaga Bay</div><div class="coord-sub">Sunday night camp · Beachfront</div></div>
+    <div class="coord-val"><a href="https://maps.google.com/?q=29.791,-114.411" target="_blank">29.7910, -114.4110</a></div>
+  </div>
+  <div class="coord-card">
+    <div><div class="coord-label">San Felipe — Pemex</div><div class="coord-sub">Monday · Top off before highway home</div></div>
+    <div class="coord-val"><a href="https://maps.google.com/?q=30.0167,-114.8333" target="_blank">30.0167, -114.8333</a></div>
+  </div>
+
+  <!-- BORDER CROSSING -->
+  <div class="ins-section-label" style="margin-top:20px;">🛂 Border Crossing Tips</div>
+
+  <div class="border-tip">
+    <div class="tip-label">Which crossing</div>
+    Use <strong>San Ysidro</strong> (I-5 south) — largest, 24/7, most lanes. Otay Mesa (SR-905) is faster midday on weekdays but adds miles to your route. For a 6:30 AM Friday departure, San Ysidro is fine — wait times are minimal that early.
+  </div>
+  <div class="border-tip">
+    <div class="tip-label">Southbound (US → Mexico)</div>
+    No stopping required. Drive through. No passport check going south — just look for the green light lane and roll through. Keep insurance docs accessible but they rarely ask.
+  </div>
+  <div class="border-tip">
+    <div class="tip-label">Northbound (Mexico → US)</div>
+    This is where the wait is. Budget 30–90 min on Monday morning. SENTRI/Ready lane cuts it to 5–10 min if you have it. Otherwise standard lane. Have passports, vehicle registration, and be ready to declare any items (food, alcohol, tobacco).
+  </div>
+  <div class="border-tip">
+    <div class="tip-label">Vehicle permit</div>
+    Baja California does NOT require a temporary vehicle import permit (TIP) — only applies if you're going to mainland Mexico. No permit needed for this trip.
+  </div>
+  <div class="border-tip">
+    <div class="tip-label">Fuel into Mexico</div>
+    Currently no official restriction on fuel carried in the tank. Some checkpoints may ask about extra gas cans — be honest, they're common for off-road use and rarely an issue. Keep cans properly sealed and vented.
+  </div>
+  <div class="border-tip">
+    <div class="tip-label">Returning with the KTM</div>
+    Declare the motorcycle. It came from the US so no duty, but have your title or registration. If asked, it's your personal recreational vehicle being re-imported — you took it to Mexico for a race event.
+  </div>
+
+  <!-- SPANISH PHRASES -->
+  <div class="ins-section-label" style="margin-top:20px;">🇲🇽 Spanish — Emergency Phrases</div>
+
+  <div class="phrase-row">
+    <div class="phrase-es">Necesito ayuda. — "I need help."</div>
+  </div>
+  <div class="phrase-row">
+    <div class="phrase-es">Llame a una ambulancia. — "Call an ambulance."</div>
+  </div>
+  <div class="phrase-row">
+    <div class="phrase-es">Hubo un accidente. — "There was an accident."</div>
+  </div>
+  <div class="phrase-row">
+    <div class="phrase-es">Estoy herido. — "I am injured."</div>
+  </div>
+  <div class="phrase-row">
+    <div class="phrase-es">¿Dónde está el hospital más cercano? — "Where is the nearest hospital?"</div>
+  </div>
+  <div class="phrase-row">
+    <div class="phrase-es">Tengo seguro. — "I have insurance."</div>
+  </div>
+  <div class="phrase-row">
+    <div class="phrase-es">No mueva el vehículo. — "Do not move the vehicle."</div>
+  </div>
+  <div class="phrase-row">
+    <div class="phrase-es">¿Tiene gasolina para vender? — "Do you have gas to sell?"</div>
+  </div>
+  <div class="phrase-row">
+    <div class="phrase-es">Me quedé sin gasolina. — "I ran out of gas."</div>
+  </div>
+  <div class="phrase-row">
+    <div class="phrase-es">¿Cuánto cuesta? — "How much does it cost?"</div>
+  </div>
+  <div class="phrase-row">
+    <div class="phrase-es">¿Puede remolcarme? — "Can you tow me?"</div>
+  </div>
+  <div class="phrase-row">
+    <div class="phrase-es">Llame a mi compañía de seguros. — "Call my insurance company."</div>
+  </div>
+
 </div>
 
 <div class="tab-panel" id="tab-insurance">
