@@ -1,0 +1,18 @@
+{
+  "name": "Baja Trip — Anita's Memorial Ride",
+  "short_name": "Baja Trip",
+  "description": "Trip planner for Anita's Memorial Ride 2026 — Baja California",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0f0f0f",
+  "theme_color": "#FF5C00",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "wlf-logo.jpg",
+      "sizes": "any",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
